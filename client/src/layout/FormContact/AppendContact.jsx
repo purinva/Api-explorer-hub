@@ -6,7 +6,7 @@ const AppendContact = () => {
     const navigate = useNavigate();
     const baseApiUrl = "http://localhost:5128/api/ContactManagement";
 
-    const addCoontact = (contactName, contactEmail) => {
+    const addContact = (contactName, contactEmail) => {
         const item = {
           name: contactName,
           email: contactEmail };
@@ -22,7 +22,7 @@ const AppendContact = () => {
                 <h1>Добавить контакт</h1>
             </div>
             <div className="card-body">
-                <FormContact addCoontact={addCoontact}/>
+                <FormContact addContact={addContact}/>
             </div>
         </div>
     );

@@ -7,7 +7,7 @@ const FormContact = (props) => {
 
     const submit = () => {
         if (contactName === "" || contactEmail === "") return;
-        props.addCoontact(contactName, contactEmail);
+        props.addContact(contactName, contactEmail);
         setContactName("");
         setContactEmail("");
     }

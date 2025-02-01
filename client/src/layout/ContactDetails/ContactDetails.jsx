@@ -2,11 +2,11 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
 
-const baseApiUrl = ProcessingInstruction.env.REACT_APP_API_URL;
+const baseApiUrl = "http://localhost:5128/api/ContactManagement";
 
 const ContactDetails = (props) => {
     const [contact, setContact] = useState({name:"", email:""});
-    const[id] = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const ContactDetails = (props) => {
         const url = `${baseApiUrl}/contacts/${id}`;
         if (window.confirm("Вы уверены?")) {
             axios.delete(url).then( () => {
-                props.OnUpdate();
+                props.onUpdate();
                 navigate("/");
             }).catch(console.log("Ошибка удаления"));
         }
@@ -29,7 +29,7 @@ const ContactDetails = (props) => {
     const handleUpdate = () => {
         const url = `${baseApiUrl}/contacts/${id}`;
         axios.put(url, contact).then( () => {
-            props.OnUpdate();
+            props.onUpdate();
             navigate("/");
         })
         .catch(console.log("Ошибка обновления"));
@@ -54,7 +54,7 @@ const ContactDetails = (props) => {
                 onChange={(e) => { setContact({...contact, email:e.target.value}); }}/>
         </div>
         <button 
-            className="btn btn-prima me-2" onClick={(e) => { handleUpdate(); }}>
+            className="btn btn-primary me-2" onClick={(e) => { handleUpdate(); }}>
             Обновить
         </button>
 
