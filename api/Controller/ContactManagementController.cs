@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 
 public class ContactManagementController : BaseController
 {
-    private readonly IStorage storage;
+    private readonly IPaginationStorage storage;
 
-    public ContactManagementController(IStorage storage)
+    public ContactManagementController(IPaginationStorage storage)
     {
         this.storage = storage;
     }
@@ -40,5 +40,30 @@ public class ContactManagementController : BaseController
         bool res = storage.UpdateContact(contactDto, id);
         if (res) return Ok();
         return Conflict("Контакт с указанным ID не нашелся");
+    }
+
+    [HttpGet("contacts/{id}")]
+    public IActionResult GetContact(int id)
+    {
+        var contact = storage.GetContactById(id);
+        if (contact != null)
+        {
+            return Ok(contact);
+        }
+        return NotFound();
+    }
+
+    [HttpGet("contacts/page")]
+    public IActionResult GetContacts(int pageNumber = 1, int pageSize = 5)
+    {
+        var (contatcs, total) = storage.GetContacts(pageNumber, pageSize);
+        var response = new 
+        {
+            Contacts = contatcs,
+            TotalCount = total, 
+            CurrentPage = pageNumber,
+            PageSize = pageSize
+        };
+        return Ok(response);
     }
 }

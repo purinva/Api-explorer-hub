@@ -21,7 +21,7 @@ public static class ApplicationServiceCollectionExtension
         services.AddDbContext<SqliteDbContext>(opt => opt.UseSqlite(stringConnection));
         //services.AddSingleton<IStorage>(new SqliteStorage(stringConnection));
 
-        services.AddScoped<IStorage, SqliteEfStorage>();
+        services.AddScoped<IPaginationStorage, SqlitePaginationEfStorage>();
         services.AddScoped<IInitializer, SqliteEfFakerInitializer>();
         services.AddCors(opt =>
         opt.AddPolicy("CorsPolicy", policy =>{

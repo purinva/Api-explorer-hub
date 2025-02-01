@@ -1,45 +1,59 @@
 import axios from 'axios';
 import React, {useState, useEffect} from "react";
 import TableContact from "./layout/TableContact/TableContact";
-import FormContact from "./layout/FormContact/FromContact";
+import AppendContact from "./layout/FormContact/AppendContact";
+import Pagination from "./layout/Pagination/Pagination";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
+import ContactDetails from './layout/ContactDetails/ContactDetails';
 
 const baseApiUrl = "http://localhost:5128/api/ContactManagement";
 
 const App = () => {
   const [contacts, setContacts] = useState([]);
+  const location = useLocation();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [pageSize] = useState(10);
+  const [updateTrigger, setUpdateTrigger] = new useState(0);
 
-  const url = `${baseApiUrl}/contacts`;
+  const handleUpdateTrigger = () => {
+    setUpdateTrigger(updateTrigger + 1);
+  }
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber); }
+
   useEffect(() => {
-    axios.get(url).then(res => setContacts(res.data));
-  }, []);
-
-  const addCoontact = (contactName, contactEmail) => {
-    const item = {
-      name: contactName,
-      email: contactEmail
-    };
-
-    const url = `${baseApiUrl}/contacts`;
-    axios.post(url, item).then(response => setContacts([...contacts, response.data]));
-  }
-
-  const deleteContact = (id) => {
-    const url = `${baseApiUrl}/contacts/${id}`;
-    axios.delete(url, id);
-    setContacts(contacts.filter(item => item.id !== id));
-  }
+    const url = `${baseApiUrl}/contacts/page?pageNumber=${currentPage}&pageSize=${pageSize}`;
+    axios.get(url).then(res => {
+      setContacts(res.data.contacts);
+      setTotalPages(Math.ceil(res.data.totalCount / pageSize))
+    });
+  }, [currentPage, pageSize, location.pathname]);
 
   return (
     <div className="container mt-5">
-      <div className="card">
-        <div className="card-header">
-          <h1>Список контактов</h1>
-        </div>
-        <div className="card-body">
-          <TableContact contacts={contacts} deleteContact={deleteContact}/>
-          <FormContact addCoontact={addCoontact}/>
-        </div>
-      </div>
+      <Routes>
+        <Route path="/" element={
+          <div className="card">
+          <div className="card-header">
+            <h1>Список контактов</h1>
+          </div>
+          <div className="card-body">
+            <TableContact contacts={contacts}/>
+            <Pagination 
+              currentPage = {currentPage} 
+              totalPages = {totalPages}
+              onPageChange = {handlePageChange}/>
+            <Link to="/append"
+              className="btn btn-success mt-3">
+              Добавить контакт
+            </Link>
+          </div>
+        </div>}/>
+        <Route path="contact/:id" element={<ContactDetails
+          onUpdate = {handleUpdateTrigger}/>}/>
+        <Route path="append" element={<AppendContact/>}/>
+      </Routes>
     </div>
   );
 }
