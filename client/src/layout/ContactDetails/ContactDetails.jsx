@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
 
-const baseApiUrl = "http://localhost:5128/api/ContactManagement";
+const baseApiUrl = window.config.apiUrl;
 
 const ContactDetails = (props) => {
     const [contact, setContact] = useState({name:"", email:""});
@@ -54,7 +54,7 @@ const ContactDetails = (props) => {
                 onChange={(e) => { setContact({...contact, email:e.target.value}); }}/>
         </div>
         <button 
-            className="btn btn-primary me-2" onClick={(e) => { handleUpdate(); }}>
+            className="btn btn-prima me-2" onClick={(e) => { handleUpdate(); }}>
             Обновить
         </button>
 

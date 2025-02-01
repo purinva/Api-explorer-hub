@@ -6,7 +6,7 @@ import Pagination from "./layout/Pagination/Pagination";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import ContactDetails from './layout/ContactDetails/ContactDetails';
 
-const baseApiUrl = "http://localhost:5128/api/ContactManagement";
+const baseApiUrl = window.config.apiUrl;
 
 const App = () => {
   const [contacts, setContacts] = useState([]);

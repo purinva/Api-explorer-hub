@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const AppendContact = () => {
     const navigate = useNavigate();
-    const baseApiUrl = "http://localhost:5128/api/ContactManagement";
+    const baseApiUrl = window.config.apiUrl;
 
     const addContact = (contactName, contactEmail) => {
         const item = {
